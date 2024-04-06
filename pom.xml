@@ -26,6 +26,8 @@
 		<sonar.token>sqp_de7654a2c2def36d017ee3f39213825b96bc155e</sonar.token>
 		<sonar.projectKey>pendientes</sonar.projectKey>
 		<sonar.projectName>pendientes</sonar.projectName>
+		<spring-cloud.version>2022.0.5</spring-cloud.version>
+		<spring-cloud-azure.version>5.6.0</spring-cloud-azure.version>
 	</properties>
 
 	<dependencies>
@@ -107,6 +109,15 @@
 			<version>2.3.0</version>
 		</dependency>
 
+		<dependency>
+			<groupId>com.azure.spring</groupId>
+			<artifactId>spring-cloud-azure-starter</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.azure.spring</groupId>
+			<artifactId>spring-cloud-azure-starter-keyvault</artifactId>
+		</dependency>
+
 	</dependencies>
 
 	<dependencyManagement>
@@ -115,6 +126,14 @@
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-dependencies</artifactId>
 				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>com.azure.spring</groupId>
+				<artifactId>spring-cloud-azure-dependencies</artifactId>
+				<version>${spring-cloud-azure.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
