@@ -22,7 +22,7 @@ public class CategoriaController {
     }
 
     @GetMapping("Obtener/{id}")
-    public ResponseEntity<Optional> obtenerCategoria(@PathVariable Long id){
+    public ResponseEntity<Optional<CategoriaDTO>> obtenerCategoria(@PathVariable Long id){
         return ResponseEntity.ok(categoriaServiceIn.obtenerCategoriaIn(id));
     }
     @GetMapping("allObtener")

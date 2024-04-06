@@ -29,4 +29,6 @@ public class UsuarioDTO {
     private Timestamp userDateUpdate;
     private String userDelete;
     private Timestamp userDateDelet;
+
+    private String mensaje;
 }

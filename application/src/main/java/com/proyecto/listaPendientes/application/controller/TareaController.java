@@ -1,5 +1,6 @@
 package com.proyecto.listaPendientes.application.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.proyecto.listaPendientes.domain.aggregates.dto.TareaDTO;
 import com.proyecto.listaPendientes.domain.aggregates.request.RequestTarea;
 import com.proyecto.listaPendientes.domain.port.in.TareaServiceIn;
@@ -17,31 +18,31 @@ public class TareaController {
 
     private final TareaServiceIn tareaServiceIn;
 
-    @GetMapping("delegante/CrearTarea")
-    public ResponseEntity<TareaDTO> crearTarea(@RequestBody RequestTarea requestTarea){
+    @PostMapping("/delegante/CrearTarea")
+    public ResponseEntity<TareaDTO> crearTarea(@RequestBody RequestTarea requestTarea) throws JsonProcessingException {
         return ResponseEntity.ok(tareaServiceIn.crearTareaIn(requestTarea));
     }
 
-    @GetMapping("delegante/ObtenerTarea/{id}")
+    @GetMapping("/delegante/ObtenerTarea/{id}")
     public ResponseEntity<Optional<TareaDTO>> obtenerTarea(@PathVariable Long id){
         return ResponseEntity.ok(tareaServiceIn.obtenerTareaIn(id));
     }
-    @GetMapping("delegante/AllTarea")
+    @GetMapping("/delegante/AllTarea")
     public ResponseEntity<List<TareaDTO>> obtenerTodasDelegante(){
         return ResponseEntity.ok(tareaServiceIn.obtenerTodasIn());
     }
 
-    @GetMapping("responsable/AllTarea")
+    @GetMapping("/responsable/AllTarea")
     public ResponseEntity<List<TareaDTO>> obtenerTodasResponsable(){
         return ResponseEntity.ok(tareaServiceIn.obtenerTodasIn());
     }
 
-    @PutMapping("delegante/ActualizarTarea/{id}")
+    @PutMapping("/delegante/ActualizarTarea/{id}")
     public ResponseEntity<TareaDTO> actualzarTarea(@PathVariable Long id,@RequestBody RequestTarea requestTarea){
         return ResponseEntity.ok(tareaServiceIn.actualzarTareaIn(id,requestTarea));
     }
 
-    @DeleteMapping("delegante/EliminarTarea/{id}")
+    @DeleteMapping("/delegante/EliminarTarea/{id}")
     public ResponseEntity<TareaDTO> deleteTarea(@PathVariable Long id){
         return ResponseEntity.ok(tareaServiceIn.deleteTareaIn(id));
     }

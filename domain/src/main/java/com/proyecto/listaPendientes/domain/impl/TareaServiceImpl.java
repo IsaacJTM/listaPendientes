@@ -1,5 +1,6 @@
 package com.proyecto.listaPendientes.domain.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.proyecto.listaPendientes.domain.aggregates.dto.TareaDTO;
 import com.proyecto.listaPendientes.domain.aggregates.request.RequestTarea;
 import com.proyecto.listaPendientes.domain.port.in.TareaServiceIn;
@@ -16,7 +17,7 @@ public class TareaServiceImpl implements TareaServiceIn {
 
     private final TareaServiceOut tareaServiceOut;
     @Override
-    public TareaDTO crearTareaIn(RequestTarea requestTarea) {
+    public TareaDTO crearTareaIn(RequestTarea requestTarea) throws JsonProcessingException {
 
         return tareaServiceOut.crearTareaOut(requestTarea);
     }

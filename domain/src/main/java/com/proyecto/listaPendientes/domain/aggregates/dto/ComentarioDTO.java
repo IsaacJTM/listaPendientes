@@ -4,10 +4,18 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.sql.Timestamp;
+
 @Getter
 @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class RolDTO {
-    private String nombreRol;
+public class ComentarioDTO {
+
+    private Long idComentario;
+    private Timestamp fechaCreacion;
+    private Timestamp fechaActualizacion;
+    private String descripcionComentario;
+
+
     private String mensaje;
 }

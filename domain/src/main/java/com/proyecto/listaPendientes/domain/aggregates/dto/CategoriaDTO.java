@@ -21,5 +21,6 @@ public class CategoriaDTO {
     private Timestamp userDateUpdate;
     private String userDelete;
     private Timestamp userDateDelete;
+    private String mensaje;
 
 }

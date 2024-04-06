@@ -11,10 +11,9 @@ public class RequestTarea {
     private String titulo;
     private String descripcion;
     private Date fechaCreacion;
-    private Date fechaVencimiento;
+    private String fechaVencimiento;
     private String usuario;
     private String categoria;
     private String comentario;
-
 
 }

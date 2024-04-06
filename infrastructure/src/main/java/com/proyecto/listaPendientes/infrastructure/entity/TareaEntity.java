@@ -52,7 +52,7 @@ public class TareaEntity {
     private Timestamp userDateDelet;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "id_comentario_fk", nullable = false)
+    @JoinColumn(name = "id_comentario_fk")
     private ComentarioEntity comentario;
 
     @ManyToOne(optional = false)

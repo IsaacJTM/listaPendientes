@@ -2,6 +2,7 @@ package com.proyecto.listaPendientes.domain.aggregates.exception;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.proyecto.listaPendientes.domain.aggregates.dto.TareaDTO;
 import com.proyecto.listaPendientes.domain.aggregates.response.ResponseBase;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,4 +34,6 @@ public class ExceptionGlobal{
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(jsonResponse);
 
     }
+
+
 }

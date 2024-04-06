@@ -24,6 +24,8 @@ public class TareaDTO {
     private Timestamp userDateUpdate;
     private String userDelete;
     private String comentario;
-    private String categoria;
-    private String usuario;
+    private CategoriaDTO categoria;
+    private UsuarioDTO usuario;
+
+    private String mensaje;
 }

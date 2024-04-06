@@ -1,16 +1,14 @@
 package com.proyecto.listaPendientes.infrastructure.adapter;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.proyecto.listaPendientes.domain.aggregates.constants.Constants;
 import com.proyecto.listaPendientes.domain.aggregates.dto.TareaDTO;
-import com.proyecto.listaPendientes.domain.aggregates.dto.UsuarioDTO;
-import com.proyecto.listaPendientes.domain.aggregates.request.RequestCategoria;
 import com.proyecto.listaPendientes.domain.aggregates.request.RequestTarea;
 import com.proyecto.listaPendientes.domain.port.out.TareaServiceOut;
 import com.proyecto.listaPendientes.infrastructure.entity.CategoriaEntity;
 import com.proyecto.listaPendientes.infrastructure.entity.ComentarioEntity;
 import com.proyecto.listaPendientes.infrastructure.entity.TareaEntity;
 import com.proyecto.listaPendientes.infrastructure.entity.UsuarioEntity;
-import com.proyecto.listaPendientes.infrastructure.mapper.CategoriaMapper;
 import com.proyecto.listaPendientes.infrastructure.mapper.TareaMapper;
 import com.proyecto.listaPendientes.infrastructure.patAdapter.PatAdapter;
 import com.proyecto.listaPendientes.infrastructure.redis.RedisService;
@@ -22,7 +20,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,10 +36,19 @@ public class TareaAdapter implements TareaServiceOut {
     private final ComentarioRepository comentarioRepository;
     private final CategoriaRepository categoriaRepository;
     private final RedisService redisService;
+
+
     @Override
-    public TareaDTO crearTareaOut(RequestTarea requestTarea) {
-        tareaRepository.save(getEntity(requestTarea));
-        return tareaMapper.mapToDTO(getEntity(requestTarea));
+    public TareaDTO crearTareaOut(RequestTarea requestTarea) throws JsonProcessingException {
+      try {
+          TareaEntity tareaGuardar = getEntity(requestTarea);
+          tareaRepository.save(tareaGuardar);
+          return tareaMapper.mapToDTO(tareaGuardar);
+      }catch (Exception ex){
+            TareaDTO tareaDTO = new TareaDTO();
+            tareaDTO.setMensaje("Error" + ex.getMessage());
+            return tareaDTO;
+      }
     }
 
     @Override
@@ -92,26 +102,34 @@ public class TareaAdapter implements TareaServiceOut {
     }
 
 
-    private TareaEntity getEntity(RequestTarea requestTarea){
+    private TareaEntity getEntity(RequestTarea requestTarea) {
         UsuarioEntity usuarioEntity = usuarioRepository.findByIdUsuario(requestTarea.getUsuario());
-        CategoriaEntity categoriaEntity = categoriaRepository.findByIdCategoria(requestTarea.getUsuario());
-        ComentarioEntity comentarioEntity = comentarioRepository.findByIdComentario(requestTarea.getUsuario());
+        if (usuarioEntity == null) {
+            return null;
+        }
+        CategoriaEntity categoriaEntity = categoriaRepository.findByIdCategoria(requestTarea.getCategoria());
+        ComentarioEntity comentarioEntity = comentarioRepository.findByIdComentario(String.valueOf(requestTarea.getComentario()));
+
 
         TareaEntity entity = new TareaEntity();
         entity.setTitulo(requestTarea.getTitulo());
         entity.setDescripcion(requestTarea.getDescripcion());
         entity.setFechaCreacion(getTimestamp());
-        entity.setFechaVencimiento((Timestamp)requestTarea.getFechaVencimiento());
+        entity.setFechaVencimiento(convertirAFechaTimestamp(requestTarea.getFechaVencimiento()));
+        entity.setEstadoTarea(Constants.STATUS_ACTIVE);
         entity.setUserCreate(Constants.AUDIT_ADMIN);
         entity.setUserDateCreate(getTimestamp());
         entity.setUsuario(usuarioEntity);
-        entity.setCategoria(categoriaEntity);
         entity.setComentario(comentarioEntity);
+        entity.setCategoria(categoriaEntity);
+
         return entity;
     }
 
     private TareaEntity getEntityUpdate(TareaEntity tareaActualizar){
+        ComentarioEntity comentarioEntity = comentarioRepository.findByIdComentario(String.valueOf(tareaActualizar.getComentario()));
         tareaActualizar.setTitulo(tareaActualizar.getTitulo());
+        tareaActualizar.setComentario(comentarioEntity);
         tareaActualizar.setDescripcion(tareaActualizar.getDescripcion());
         tareaActualizar.setUserUpdate(Constants.AUDIT_ADMIN);
         tareaActualizar.setFechaVencimiento(tareaActualizar.getFechaVencimiento());
@@ -122,6 +140,17 @@ public class TareaAdapter implements TareaServiceOut {
         long currentTime = System.currentTimeMillis();
         Timestamp timestamp = new Timestamp(currentTime);
         return timestamp;
+    }
+
+    private static Timestamp convertirAFechaTimestamp(String fechaString) {
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date fechaDate = dateFormat.parse(fechaString);
+            return new Timestamp(fechaDate.getTime());
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }

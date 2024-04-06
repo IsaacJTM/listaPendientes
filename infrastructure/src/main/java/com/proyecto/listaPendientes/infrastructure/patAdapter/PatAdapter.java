@@ -2,8 +2,6 @@ package com.proyecto.listaPendientes.infrastructure.patAdapter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.proyecto.listaPendientes.domain.aggregates.dto.TareaDTO;
-import com.proyecto.listaPendientes.domain.aggregates.dto.UsuarioDTO;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
