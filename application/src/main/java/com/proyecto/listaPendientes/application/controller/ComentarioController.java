@@ -15,17 +15,17 @@ import org.springframework.web.bind.annotation.*;
 public class ComentarioController {
     private final ComentarioServiceIn comentarioServiceIn;
 
-    @PostMapping("/delegante/CrearTarea")
+    @PostMapping("/delegante/CrearComentario")
     public ResponseEntity<ComentarioDTO> crearComentario(@RequestBody RequestComentario requestComentario) throws JsonProcessingException {
         return ResponseEntity.ok(comentarioServiceIn.crearComentarioIn(requestComentario));
     }
-    @PutMapping("/delegante/ActualizarTarea/{id}")
-    public ResponseEntity<ComentarioDTO> actualzarTarea(@PathVariable Long id,@RequestBody RequestComentario requestComentario){
+    @PutMapping("/delegante/ActualizarComentario/{id}")
+    public ResponseEntity<ComentarioDTO> actualzarComentario(@PathVariable Long id,@RequestBody RequestComentario requestComentario){
         return ResponseEntity.ok(comentarioServiceIn.actualzarComentarioIn(id,requestComentario));
     }
 
-    @DeleteMapping("/delegante/EliminarTarea/{id}")
-    public ResponseEntity<ComentarioDTO> deleteTarea(@PathVariable Long id){
+    @DeleteMapping("/delegante/EliminarComentario/{id}")
+    public ResponseEntity<ComentarioDTO> deleteComentario(@PathVariable Long id){
         return ResponseEntity.ok(comentarioServiceIn.deleteComentarioIn(id));
     }
 

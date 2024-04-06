@@ -23,6 +23,7 @@ public class TareaDTO {
     private String userUpdate;
     private Timestamp userDateUpdate;
     private String userDelete;
+    private Timestamp userDateDelet;
     private String comentario;
     private CategoriaDTO categoria;
     private UsuarioDTO usuario;

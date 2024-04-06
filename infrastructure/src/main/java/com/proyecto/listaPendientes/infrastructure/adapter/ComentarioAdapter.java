@@ -54,6 +54,7 @@ public class ComentarioAdapter implements ComentarioServiceOut {
         boolean existe = comentarioRepository.existsById(id);
         if(existe){
             Optional<ComentarioEntity> entity = comentarioRepository.findById(id);
+            entity.get().setEstadoComentario(0);
             comentarioRepository.save(entity.get());
             return comentarioMapper.mapToDTO(entity.get());
         }

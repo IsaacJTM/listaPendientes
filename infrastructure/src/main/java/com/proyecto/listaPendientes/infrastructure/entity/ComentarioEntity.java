@@ -20,6 +20,9 @@ public class ComentarioEntity {
     @Column(name = "id_comentario")
     private Long idComentario;
 
+    @Column(name = "estado_comentario")
+    private Integer estadoComentario;
+
     @Column(name = "fecha_creacion")
     private Timestamp fechaCreacion;
 

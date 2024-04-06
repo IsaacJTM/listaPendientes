@@ -17,7 +17,7 @@ import java.util.List;
 @Entity
 @Table(name = "usuario")
 @RequiredArgsConstructor
-@NamedQuery(name = "UsuarioEntity.findByIdUsuario", query = "SELECT u FROM UsuarioEntity u JOIN u.rol r WHERE u.idUsuario = :idUsuario AND r.idRol = 2")
+@NamedQuery(name = "UsuarioEntity.findByIdUsuario", query = "SELECT u FROM UsuarioEntity u JOIN u.rol r WHERE u.idUsuario = :idUsuario AND r.idRol = 3")
 public class UsuarioEntity implements UserDetails {
 
     @Id

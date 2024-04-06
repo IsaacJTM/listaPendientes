@@ -82,8 +82,8 @@ public class TareaAdapter implements TareaServiceOut {
         boolean existe = tareaRepository.existsById(id);
         if(existe){
             Optional<TareaEntity> entity = tareaRepository.findById(id);
-            tareaRepository.save(getEntityUpdate(entity.get()));
-            return tareaMapper.mapToDTO(getEntityUpdate(entity.get()));
+            tareaRepository.save(getEntityUpdate(entity.get(),requestTarea));
+            return tareaMapper.mapToDTO(getEntityUpdate(entity.get(),requestTarea));
         }
         return null;
     }
@@ -95,6 +95,7 @@ public class TareaAdapter implements TareaServiceOut {
             Optional<TareaEntity> entity = tareaRepository.findById(id);
             entity.get().setUserDelete(Constants.AUDIT_ADMIN);
             entity.get().setUserDateDelet(getTimestamp());
+            entity.get().setEstadoTarea(0);
             tareaRepository.save(entity.get());
             return tareaMapper.mapToDTO(entity.get());
         }
@@ -117,7 +118,6 @@ public class TareaAdapter implements TareaServiceOut {
         entity.setFechaCreacion(getTimestamp());
         entity.setFechaVencimiento(convertirAFechaTimestamp(requestTarea.getFechaVencimiento()));
         entity.setEstadoTarea(Constants.STATUS_ACTIVE);
-        entity.setUserCreate(Constants.AUDIT_ADMIN);
         entity.setUserDateCreate(getTimestamp());
         entity.setUsuario(usuarioEntity);
         entity.setComentario(comentarioEntity);
@@ -126,13 +126,19 @@ public class TareaAdapter implements TareaServiceOut {
         return entity;
     }
 
-    private TareaEntity getEntityUpdate(TareaEntity tareaActualizar){
-        ComentarioEntity comentarioEntity = comentarioRepository.findByIdComentario(String.valueOf(tareaActualizar.getComentario()));
-        tareaActualizar.setTitulo(tareaActualizar.getTitulo());
-        tareaActualizar.setComentario(comentarioEntity);
-        tareaActualizar.setDescripcion(tareaActualizar.getDescripcion());
-        tareaActualizar.setUserUpdate(Constants.AUDIT_ADMIN);
+    private TareaEntity getEntityUpdate(TareaEntity tareaActualizar, RequestTarea requestTarea){
+        UsuarioEntity usuarioEntity = usuarioRepository.findByIdUsuario(requestTarea.getUsuario());
+        CategoriaEntity categoriaEntity = categoriaRepository.findByIdCategoria(requestTarea.getCategoria());
+        ComentarioEntity comentarioEntity = comentarioRepository.findByIdComentario(requestTarea.getComentario());
+
+        tareaActualizar.setTitulo(requestTarea.getTitulo());
+        tareaActualizar.setDescripcion(requestTarea.getDescripcion());
+        tareaActualizar.setFechaVencimiento(convertirAFechaTimestamp(requestTarea.getFechaVencimiento()));
+        tareaActualizar.setUserDateUpdate(getTimestamp());
         tareaActualizar.setFechaVencimiento(tareaActualizar.getFechaVencimiento());
+        tareaActualizar.setUsuario(usuarioEntity);
+        tareaActualizar.setCategoria(categoriaEntity);
+        tareaActualizar.setComentario(comentarioEntity);
         return tareaActualizar;
     }
 
