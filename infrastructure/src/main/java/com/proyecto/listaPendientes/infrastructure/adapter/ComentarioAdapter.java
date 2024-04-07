@@ -1,6 +1,7 @@
 package com.proyecto.listaPendientes.infrastructure.adapter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.proyecto.listaPendientes.domain.aggregates.constants.Constants;
 import com.proyecto.listaPendientes.domain.aggregates.dto.ComentarioDTO;
 import com.proyecto.listaPendientes.domain.aggregates.request.RequestComentario;
 import com.proyecto.listaPendientes.domain.port.out.ComentarioServiceOut;
@@ -24,11 +25,8 @@ public class ComentarioAdapter implements ComentarioServiceOut {
     @Override
     public ComentarioDTO crearComentarioOut(RequestComentario requestComentario) throws JsonProcessingException {
         try {
-            ComentarioEntity entity = new ComentarioEntity();
-            entity.setDescripcionComentario(requestComentario.getDescripcionComentario());
-            entity.setFechaCreacion(getTimestamp());
-            comentarioRepository.save(entity);
-            return comentarioMapper.mapToDTO(entity);
+            comentarioRepository.save(getEntity(requestComentario));
+            return comentarioMapper.mapToDTO(getEntity(requestComentario));
         }catch (Exception ex){
             ComentarioDTO comentarioDTO = new ComentarioDTO();
             comentarioDTO.setMensaje("Error" + ex.getMessage());
@@ -54,13 +52,22 @@ public class ComentarioAdapter implements ComentarioServiceOut {
         boolean existe = comentarioRepository.existsById(id);
         if(existe){
             Optional<ComentarioEntity> entity = comentarioRepository.findById(id);
+            entity.get().setEstadoComentario(0);
             comentarioRepository.save(entity.get());
             return comentarioMapper.mapToDTO(entity.get());
         }
         return null;
     }
 
-
+    private ComentarioEntity getEntity(RequestComentario requestComentario){
+        ComentarioEntity entity = new ComentarioEntity();
+        entity.setDescripcionComentario(requestComentario.getDescripcionComentario());
+        entity.setFechaCreacion(getTimestamp());
+        entity.setEstadoComentario(Constants.STATUS_ACTIVE);
+        entity.setUserCreate(Constants.AUDIT_ADMIN);
+        entity.setUserDateCreate(getTimestamp());
+        return entity;
+    }
     private Timestamp getTimestamp(){
         long currentTime = System.currentTimeMillis();
         Timestamp timestamp = new Timestamp(currentTime);

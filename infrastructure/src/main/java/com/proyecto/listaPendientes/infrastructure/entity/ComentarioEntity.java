@@ -28,4 +28,25 @@ public class ComentarioEntity {
 
     @Column(name = "descripcion_comentario", nullable = false, length = 300)
     private String descripcionComentario;
+
+    @Column(name = "estado_comentario")
+    private Integer estadoComentario;
+
+    @Column(name = "user_create", length = 45)
+    private String userCreate;
+
+    @Column(name = "user_date_create")
+    private Timestamp userDateCreate;
+
+    @Column(name = "user_update", length = 45)
+    private String userUpdate;
+
+    @Column(name = "user_date_update")
+    private Timestamp userDateUpdate;
+
+    @Column(name = "user_delete", length = 45)
+    private String userDelete;
+
+    @Column(name = "user_date_delete")
+    private Timestamp userDateDelete;
 }

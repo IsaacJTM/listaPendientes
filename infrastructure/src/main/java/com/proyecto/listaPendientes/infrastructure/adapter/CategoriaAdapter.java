@@ -63,8 +63,8 @@ public class CategoriaAdapter implements CategoriaServiceOut{
         boolean existe = categoriaRepository.existsById(id);
         if(existe){
             Optional<CategoriaEntity> entity = categoriaRepository.findById(id);
-            categoriaRepository.save(getEntityUpdate(entity.get()));
-            return categoriaMapper.mapToDTO(getEntityUpdate(entity.get()));
+            categoriaRepository.save(getEntityUpdate(entity.get(),requestCategoria));
+            return categoriaMapper.mapToDTO(getEntityUpdate(entity.get(),requestCategoria));
         }
         return null;
     }
@@ -94,9 +94,9 @@ public class CategoriaAdapter implements CategoriaServiceOut{
         return entity;
     }
 
-    private CategoriaEntity getEntityUpdate(CategoriaEntity categoriaActualizar){
-        categoriaActualizar.setNombreCategoria(categoriaActualizar.getNombreCategoria());
-        categoriaActualizar.setDescripcionCategoria(categoriaActualizar.getDescripcionCategoria());
+    private CategoriaEntity getEntityUpdate(CategoriaEntity categoriaActualizar, RequestCategoria requestCategoria){
+        categoriaActualizar.setNombreCategoria(requestCategoria.getNombreCategoria());
+        categoriaActualizar.setDescripcionCategoria(requestCategoria.getDescripcion());
         categoriaActualizar.setUserUpdate(Constants.AUDIT_ADMIN);
         categoriaActualizar.setUserDateUpdate(getTimestamp());
         return categoriaActualizar;
